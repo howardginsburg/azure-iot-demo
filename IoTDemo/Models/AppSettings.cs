@@ -21,6 +21,7 @@ public class EventGridSettings
     public int Port { get; set; } = 8883;
     public string ClientCertPath { get; set; } = string.Empty;
     public string ClientKeyPath { get; set; } = string.Empty;
+    public string CaCertPath { get; set; } = string.Empty;
     public string Topic { get; set; } = "factory/sensors/telemetry";
 }
 

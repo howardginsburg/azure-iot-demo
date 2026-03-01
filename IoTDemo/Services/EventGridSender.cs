@@ -45,12 +45,21 @@ public class EventGridSender : ISender
             var cn = cert.GetNameInfo(X509NameType.SimpleName, false) ?? "unknown-device";
             _telemetry = new TelemetryGenerator(cn, "event-grid");
 
+            // Load CA cert for server validation if provided
+            var caCerts = new X509Certificate2Collection();
+            if (!string.IsNullOrEmpty(_settings.CaCertPath))
+                caCerts.Add(new X509Certificate2(_settings.CaCertPath));
+
             var options = new MqttClientOptionsBuilder()
                 .WithTcpServer(_settings.Hostname, _settings.Port)
                 .WithTlsOptions(o =>
                 {
                     o.UseTls();
                     o.WithClientCertificates(new[] { cert });
+                    if (caCerts.Count > 0)
+                    {
+                        o.WithTrustChain(caCerts);
+                    }
                 })
                 .WithClientId(Guid.NewGuid().ToString())
                 .WithProtocolVersion(MQTTnet.Formatter.MqttProtocolVersion.V500)
