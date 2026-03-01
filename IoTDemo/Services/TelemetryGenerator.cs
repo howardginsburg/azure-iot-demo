@@ -8,7 +8,6 @@ public class TelemetryGenerator
     private readonly Random _random = new();
     private readonly string _deviceId;
     private readonly string _source;
-    private readonly string _location;
 
     private double _temperature;
     private double _pressure;
@@ -19,11 +18,10 @@ public class TelemetryGenerator
     private const double VibBaseline = 0.03, VibDrift = 0.005, VibMin = 0.01, VibMax = 0.10;
     private const double AnomalyChance = 0.05, AnomalyVibMin = 0.15, AnomalyVibMax = 0.25;
 
-    public TelemetryGenerator(string deviceId, string source, string location)
+    public TelemetryGenerator(string deviceId, string source)
     {
         _deviceId = deviceId;
         _source = source;
-        _location = location;
         _temperature = TempBaseline;
         _pressure = PressBaseline;
         _vibration = VibBaseline;
@@ -44,7 +42,6 @@ public class TelemetryGenerator
             DeviceId = _deviceId,
             Timestamp = DateTime.UtcNow,
             Source = _source,
-            Location = _location,
             Temperature = Math.Round(_temperature, 2),
             Pressure = Math.Round(_pressure, 2),
             Vibration = Math.Round(_vibration, 4)

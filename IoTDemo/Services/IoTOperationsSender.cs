@@ -23,11 +23,11 @@ public class IoTOperationsSender : ISender
     public DateTime? LastSentUtc { get; private set; }
     public string? LastError { get; private set; }
 
-    public IoTOperationsSender(IoTOperationsSettings settings, string deviceId, string location, int intervalMs)
+    public IoTOperationsSender(IoTOperationsSettings settings, int intervalMs)
     {
         _settings = settings;
         _intervalMs = intervalMs;
-        _telemetry = new TelemetryGenerator(deviceId, "iot-operations", location);
+        _telemetry = new TelemetryGenerator(settings.Username, "iot-operations");
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)

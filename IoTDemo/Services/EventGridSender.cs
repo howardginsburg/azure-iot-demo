@@ -12,7 +12,7 @@ namespace IoTDemo.Services;
 public class EventGridSender : ISender
 {
     private readonly EventGridSettings _settings;
-    private readonly TelemetryGenerator _telemetry;
+    private TelemetryGenerator _telemetry;
     private readonly int _intervalMs;
     private IMqttClient? _client;
     private CancellationTokenSource? _loopCts;
@@ -24,11 +24,12 @@ public class EventGridSender : ISender
     public DateTime? LastSentUtc { get; private set; }
     public string? LastError { get; private set; }
 
-    public EventGridSender(EventGridSettings settings, string deviceId, string location, int intervalMs)
+    public EventGridSender(EventGridSettings settings, int intervalMs)
     {
         _settings = settings;
         _intervalMs = intervalMs;
-        _telemetry = new TelemetryGenerator(deviceId, "event-grid", location);
+        // DeviceId derived from cert CN at connect time; use placeholder until then
+        _telemetry = new TelemetryGenerator("pending-cert-load", "event-grid");
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -39,6 +40,10 @@ public class EventGridSender : ISender
             _client = factory.CreateMqttClient();
 
             var cert = X509Certificate2.CreateFromPemFile(_settings.ClientCertPath, _settings.ClientKeyPath);
+
+            // Extract CN from cert subject as deviceId
+            var cn = cert.GetNameInfo(X509NameType.SimpleName, false) ?? "unknown-device";
+            _telemetry = new TelemetryGenerator(cn, "event-grid");
 
             var options = new MqttClientOptionsBuilder()
                 .WithTcpServer(_settings.Hostname, _settings.Port)

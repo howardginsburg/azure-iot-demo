@@ -2,8 +2,6 @@ namespace IoTDemo.Models;
 
 public class AppSettings
 {
-    public string DeviceId { get; set; } = "factory-sensor-01";
-    public string Location { get; set; } = "Line-3-Motor-A";
     public int IntervalSeconds { get; set; } = 2;
     public IoTHubSettings IoTHub { get; set; } = new();
     public EventGridSettings EventGrid { get; set; } = new();

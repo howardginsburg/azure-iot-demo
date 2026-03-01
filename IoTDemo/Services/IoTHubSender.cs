@@ -27,11 +27,11 @@ public class IoTHubSender : ISender
     public DateTime? LastSentUtc { get; private set; }
     public string? LastError { get; private set; }
 
-    public IoTHubSender(IoTHubSettings settings, string location, int intervalMs)
+    public IoTHubSender(IoTHubSettings settings, int intervalMs)
     {
         _settings = settings;
         _intervalMs = intervalMs;
-        _telemetry = new TelemetryGenerator(settings.DeviceId, "iot-hub", location);
+        _telemetry = new TelemetryGenerator(settings.DeviceId, "iot-hub");
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)

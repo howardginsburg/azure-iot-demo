@@ -15,9 +15,9 @@ var intervalMs = settings.IntervalSeconds * 1000;
 
 ISender[] senders =
 [
-    new IoTHubSender(settings.IoTHub, settings.Location, intervalMs),
-    new EventGridSender(settings.EventGrid, settings.DeviceId, settings.Location, intervalMs),
-    new IoTOperationsSender(settings.IoTOperations, settings.DeviceId, settings.Location, intervalMs)
+    new IoTHubSender(settings.IoTHub, intervalMs),
+    new EventGridSender(settings.EventGrid, intervalMs),
+    new IoTOperationsSender(settings.IoTOperations, intervalMs)
 ];
 
 using var appCts = new CancellationTokenSource();
