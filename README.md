@@ -148,14 +148,13 @@ Event Grid uses MQTT v5 with X.509 certificate authentication.
      --topic-spaces-configuration "{state:'Enabled'}"
    ```
 
-2. **Generate certificates** (using [step-ca](https://smallstep.com/docs/step-ca/) or OpenSSL):
+2. **Generate certificates** using the [CertificateGenerator](https://github.com/howardginsburg/CertificateGenerator) tool:
    ```bash
-   # Generate CA
-   step certificate create "Demo Root CA" ca.pem ca-key.pem --profile root-ca
-
-   # Generate client cert with CN as device identity
-   step certificate create "factory-sensor-02" client.pem client-key.pem \
-     --ca ca.pem --ca-key ca-key.pem --no-password --insecure
+   # Clone and run the certificate generator
+   git clone https://github.com/howardginsburg/CertificateGenerator.git
+   cd CertificateGenerator
+   # Follow the README to generate a CA and client certificate
+   # Use "factory-sensor-02" as the CN for the client cert (this becomes the deviceId)
    ```
 
 3. **Register the CA certificate** in Event Grid:
